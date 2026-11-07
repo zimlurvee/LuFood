@@ -1,0 +1,4 @@
+# Optional, for local experiments (heavy; not needed on Render):
+-r requirements.txt
+xgboost>=2.0    # train.py compares it automatically when installed
+shap>=0.45      # used for explanations when installed; otherwise sampled Shapley values are used

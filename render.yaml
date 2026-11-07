@@ -1,0 +1,17 @@
+# Render Blueprint: deploys the API (and the app it serves) from this folder's Dockerfile.
+services:
+  - type: web
+    name: lufood
+    runtime: docker
+    plan: free
+    region: singapore            # closest Render region to the Supabase project (ap-northeast-2)
+    healthCheckPath: /api/health
+    envVars:
+      - key: DATABASE_URL        # SECRET: Supabase pooler connection string incl. your DB password; set it in Render, never in git
+        sync: false
+      - key: SUPABASE_URL
+        value: https://xprjxycdigyfifrayouv.supabase.co
+      - key: SUPABASE_ANON_KEY   # publishable key: safe to be public, meant for browsers
+        value: sb_publishable_vFNwzfEHNa7nVCNOtRFiiA_ZM7K4K3Z
+      - key: LUFOOD_ORIGINS      # your site origin(s), comma separated
+        sync: false
