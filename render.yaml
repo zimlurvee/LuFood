@@ -11,7 +11,7 @@ services:
         sync: false
       - key: SUPABASE_URL
         value: https://xprjxycdigyfifrayouv.supabase.co
-      - key: SUPABASE_ANON_KEY   # publishable key: safe to be public, meant for browsers
-        value: sb_publishable_vFNwzfEHNa7nVCNOtRFiiA_ZM7K4K3Z
+      - key: SUPABASE_ANON_KEY   # anon (public) key: meant for browsers
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inhwcmp4eWNkaWd5ZmlmcmF5b3V2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTM5ODQzNTQsImV4cCI6MjEwOTU2MDM1NH0.duEUcr29311IquXAAsfhZYSxXc8akNQEWwON2diknlg
       - key: LUFOOD_ORIGINS      # your site origin(s), comma separated
         sync: false

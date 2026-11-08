@@ -37,34 +37,30 @@ Interactive docs: `http://localhost:8000/docs`.
 2. `cp .env.example .env`, set `DATABASE_URL`, and load it (e.g. `export $(grep -v '^#' .env | xargs)`).
 3. Tables are created on first start. Enable Row Level Security if the browser will ever talk to Supabase directly.
 
-## Which platform? (short answer)
-This is a custom Python stack, so no builder replaces the backend: **FastAPI + the scikit-learn model must run on a server** (Render, Railway, Google Cloud Run or Fly.io), with **Supabase** for Postgres and Auth. The front end is the only part a platform choice changes:
+## Run it for free with no card: GitHub Pages + Supabase (recommended)
+`docs/` is a complete static app. The Random Forest runs **on the device** (`docs/core.js` + `docs/model.js`, exported from Python by `export_static_model.py`), Supabase handles sign-in and each user's saved profile and history. Nothing else to host.
 
-| Option | Best for | Notes |
-|---|---|---|
-| **PWA (this folder, now)** | demo, usability testing, a thesis | installable from the browser on iOS/Android, no app-store approval, free |
-| **Capacitor** | App Store / Google Play without a rewrite | wraps `frontend/index.html` in a native shell |
-| **FlutterFlow** | native Flutter app built visually | calls this API through its API Manager; the UI must be rebuilt (the HTML cannot be imported) |
-| **Lovable** | quick React + Supabase web app | tightly tied to Supabase; calls this API as an external API; the UI must be recreated |
+1. **Upload `docs/` to your GitHub repository** (drag the whole `docs` folder onto Add file > Upload files, then Commit).
+2. **GitHub > Settings > Pages:** Source = *Deploy from a branch*, Branch = `main`, Folder = `/docs`, Save. After a minute your app is at `https://<your-username>.github.io/<repo>/`.
+3. **Supabase > Authentication > URL Configuration:** set *Site URL* to that address and add it under *Redirect URLs*. Email sign-up works immediately (users confirm by email by default). For Google, add the provider with a Google Cloud OAuth client.
+4. Open the address on your phone: Safari > Share > Add to Home Screen, or Chrome > Install app.
 
-## Install on a phone (PWA)
-Serve the API over HTTPS (below), open the URL in Safari (iOS: Share > Add to Home Screen) or Chrome (Android: Install app). The manifest, service worker and icons are in `frontend/`. Offline, the app falls back to its built-in model.
+Already done in your Supabase project "LuFoodd": the `profiles` and `assessments` tables, with Row Level Security. Each signed-in user can read and write only their own rows; anonymous visitors get nothing (tested). `docs/config.js` holds only public values (project URL and anon key). Never put the service-role key or database password in the repo.
 
-## Deploy (your Supabase project "LuFoodd" is already set up)
-Done already: the two tables exist in Supabase with Row Level Security on (only this backend can read them), and `render.yaml` holds your project URL and publishable key.
+## Optional: Python API (FastAPI) on a server
+Not needed for the free route above. Use it if you want server-side models (XGBoost/SHAP) or a central API. It needs a host that accepts a card (Render, Railway, Cloud Run); Hugging Face Docker Spaces now require a paid plan. `render.yaml` and `Dockerfile` are included; set `DATABASE_URL` (Supabase Session pooler string with your password) in the host's settings, never in git. Opening the API's own address serves the same app and switches it to this API.
 
-1. **GitHub:** create a repository and upload everything in this folder (Add file > Upload files).
-2. **Database URL (secret):** Supabase dashboard > Connect > *Session pooler* connection string. Replace `[YOUR-PASSWORD]` with your database password. Never paste it in chat or commit it to git.
-3. **Render:** New > Blueprint > pick the repo. When asked, set `DATABASE_URL` (step 2) and `LUFOOD_ORIGINS` (your Render address, e.g. `https://lufood.onrender.com`). Free services sleep when idle, so the first load can be slow.
-4. **Supabase > Authentication > URL Configuration:** set Site URL and add a Redirect URL, both to your Render address. Email sign-in works immediately (by default users must confirm their email). For Google, add the Google provider and paste the Client ID/secret from Google Cloud.
-5. Open your Render address, sign up, run an assessment. The result should say "via LuFood API", and a row appears in Supabase > Table Editor > assessments.
-
-Token checking works with either key type: asymmetric keys (JWKS), a `SUPABASE_JWT_SECRET`, or, if neither, by asking Supabase Auth itself.
-Untested here: the Docker build, Render, and live Supabase / Google sign-in (no network in my workspace).
+## Which front end later?
+| Option | Best for |
+|---|---|
+| **PWA (`docs/`, now)** | demo, usability testing (Experiment 5), a thesis |
+| **Capacitor** | App Store / Google Play without a rewrite |
+| **FlutterFlow** | native Flutter app built visually; the UI must be rebuilt |
+| **Lovable** | quick React + Supabase web app; the UI must be recreated |
 
 ## Before real users: what is NOT done
-- **Authentication is wired but untested against a live Supabase project.** Without Supabase env vars the app uses simulated sign-in and the dev `X-User-Id` header.
-- Profile and history are not yet loaded from the server on a new device (they sync up, not down).
+- **Sign-in against a live Supabase project is untested** (no internet in my workspace). The data rules (RLS) were tested on the real database. Without `docs/config.js` keys the app uses simulated sign-in.
+- **The result is never less cautious than the 2-hour/4-hour guideline**, because the model's own cut-offs are placeholders.
 - **Real data.** `app/simulate.py` uses placeholder growth parameters and label cut-offs. Fit them from ComBase / published studies (`../lufood_growth.py` has `fit_secondary_model` and `validate`), then validate on held-out real growth curves. Until then the metrics only show the pipeline works.
 - **Seafood** is unsupported until its target hazard and data are chosen.
 - **Explanations** use SHAP when installed (tree models), otherwise sampled Shapley values on the same 0-2 risk score. They explain the model, not the microbiology.
