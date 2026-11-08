@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en"><head><link rel="manifest" href="manifest.webmanifest"><meta name="theme-color" content="#f9a8d4"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="LuFood"><link rel="apple-touch-icon" href="icons/apple-touch-icon.png"><script src="config.js"></script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script><script type="module">import*as C from "./core.js";window.LuCore=C</script><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>LuFood – Food Safety Risk Prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#fff6fa;--surface:#fff;--soft:#fdf2f8;--line:#fbcfe8;--ink:#2a0f1e;--muted:#7c4a63;--pink:#ec4899;--pink-d:#be185d;--pink-l:#fce7f3;--hero:#f9a8d4;--dark:#1c0b14;--btn:#1c0b14;--btn-t:#fff;--ring:#ec4899;--low:#047857;--mod:#b45309;--high:#dc2626;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#150a10;--surface:#24121c;--soft:#2e1824;--line:#4a2538;--ink:#fce7f3;--muted:#d8a9c0;--pink:#f472b6;--pink-d:#f9a8d4;--pink-l:#3b1a2b;--dark:#0c0509;--btn:#f472b6;--btn-t:#1c0b14;--low:#34d399;--mod:#fbbf24;--high:#f87171;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#150a10;--surface:#24121c;--soft:#2e1824;--line:#4a2538;--ink:#fce7f3;--muted:#d8a9c0;--pink:#f472b6;--pink-d:#f9a8d4;--pink-l:#3b1a2b;--dark:#0c0509;--btn:#f472b6;--btn-t:#1c0b14;--low:#34d399;--mod:#fbbf24;--high:#f87171;color-scheme:dark}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Plus Jakarta Sans",system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;padding-bottom:128px}
+button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+.app{max-width:640px;margin:0 auto;padding:20px 16px 8px}
+.top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+.logo{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:var(--hero)}
+.logo svg{width:24px;height:24px}
+.wordmark{font-weight:800;font-size:22px;letter-spacing:-.02em;line-height:1.1}
+.pill{margin-left:auto;font-size:11px;font-weight:700;letter-spacing:.04em;padding:5px 11px;border-radius:99px;background:var(--dark);color:var(--hero)}
+.sub,.small,.note{color:var(--muted)}.small{font-size:12px}.note{font-size:12px;margin:10px 8px 0;text-align:center}
+.hero{position:relative;overflow:hidden;background:var(--hero);color:#1c0b14;border-radius:30px;padding:22px 20px 26px;margin-bottom:14px;min-height:168px}
+.hero .tag{display:inline-block;background:#1c0b14;color:#fff;font-size:12px;font-weight:700;padding:5px 12px;border-radius:99px}
+.hero h1{margin:12px 0 6px;font-size:28px;line-height:1.14;font-weight:800;letter-spacing:-.03em;max-width:72%}
+.hero p{margin:0;font-size:14px;max-width:66%;color:#4a1530}
+.hero::after{content:"";position:absolute;right:-26px;bottom:-26px;width:104px;height:104px;border-radius:34px;background:#ec4899;box-shadow:0 0 0 18px rgba(255,255,255,.32),0 0 0 36px rgba(255,255,255,.22),0 0 0 54px rgba(255,255,255,.14)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:26px;padding:20px;margin-bottom:14px}
+.eyebrow{margin:0 0 12px;font-size:12px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--pink-d)}
+label.f{display:block;margin:20px 0 8px;font-size:13px;font-weight:700;color:var(--muted)}
+.card>.eyebrow+label.f{margin-top:0}
+input{width:100%;height:54px;padding:0 16px;border-radius:16px;border:2px solid var(--line);background:var(--surface);color:var(--ink);font:inherit;font-size:16px;font-weight:600;font-variant-numeric:tabular-nums}
+input:focus{outline:0;border-color:var(--pink);box-shadow:0 0 0 4px rgba(236,72,153,.2)}
+.chips{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.chip{padding:12px 6px;border-radius:22px;border:2px solid var(--line);background:var(--surface);color:var(--ink);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:14px;min-height:112px}
+.chip svg{width:54px;height:54px;padding:13px;border-radius:18px;background:var(--pink-l);color:var(--ink)}
+.chip small{font-size:11px;color:var(--muted)}
+.chip[aria-pressed=true]{border-color:var(--ink)}
+.chip[aria-pressed=true] svg{background:var(--hero);color:#1c0b14}
+.chip:disabled{opacity:.5;cursor:default}
+.hdr,.row{display:grid;grid-template-columns:1fr 1fr 54px;gap:8px}
+.hdr{font-size:12px;color:var(--muted);margin-bottom:6px}.row{margin-bottom:8px}
+.x{height:54px;width:54px;border-radius:16px;border:2px solid var(--line);background:var(--surface);color:var(--muted);font-size:15px}
+.btn{width:100%;height:58px;border:0;border-radius:99px;background:var(--btn);color:var(--btn-t);font-weight:800;font-size:16px}
+.btn.ghost{height:50px;margin-top:6px;background:transparent;color:var(--pink-d);border:2px solid var(--line)}
+#msg{min-height:20px;margin-top:8px;font-size:14px;color:var(--high)}
+.view{display:none}.view.on{display:block}
+@media(prefers-reduced-motion:no-preference){.view.on{animation:in .25s ease-out}@keyframes in{from{opacity:0;transform:translateY(6px)}}input,.chip,.btn{transition:border-color .15s,background .15s}}
+.dark{background:var(--dark);color:#fff;border-color:transparent;--low:#4ade80;--mod:#fbbf24;--high:#fb7185}
+.dark .eyebrow{color:var(--hero)}
+.summary{text-align:center;border-radius:30px;padding:24px 20px}
+#label{font-size:46px;font-weight:800;letter-spacing:-.035em;line-height:1.1}
+.low{color:var(--low)}.moderate{color:var(--mod)}.high{color:var(--high)}
+.meter,.mlabels{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.meter{margin:16px 0 6px}
+.meter i{height:10px;border-radius:99px;background:rgba(255,255,255,.16)}
+.meter[data-k="0"] i:nth-child(1){background:var(--low)}
+.meter[data-k="1"] i:nth-child(-n+2){background:var(--mod)}
+.meter[data-k="2"] i{background:var(--high)}
+.mlabels{font-size:12px;color:rgba(255,255,255,.65);font-weight:700}
+.probs{margin-top:18px;text-align:left}
+.bar{display:flex;align-items:center;gap:10px;font-size:13px;margin:9px 0}
+.bar .n{width:92px;flex:none;color:var(--muted);font-weight:700}
+.bar .t,.bar .c{flex:1;display:flex;height:8px;border-radius:9px;background:var(--pink-l);overflow:hidden}
+.bar .t i,.bar .c i{display:block;height:100%}.bar .v{width:44px;text-align:right;flex:none;font-weight:800;font-variant-numeric:tabular-nums}
+.dark .bar .n{color:rgba(255,255,255,.7)}.dark .bar .t{background:rgba(255,255,255,.14)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.stats div{border-radius:24px;padding:16px 8px;text-align:center;border:1px solid var(--line);background:var(--surface)}
+.stats div:nth-child(1){background:var(--hero);color:#1c0b14;border-color:transparent}
+.stats div:nth-child(2){background:var(--dark);color:#fff;border-color:transparent}
+.stats b{display:block;font-size:24px;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.2}
+.stats span{font-size:11px;font-weight:600}.stats div:nth-child(2) span{color:var(--hero)}
+.advice{background:var(--pink-l);border-color:transparent}.advice p:last-child{margin:0;font-weight:500}
+#chart svg{width:100%;height:auto;display:block}
+.hist{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--line);font-size:14px}
+.hist:first-child{border-top:0;padding-top:0}
+.tabwrap{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;padding:0 14px calc(12px + env(safe-area-inset-bottom,0px));pointer-events:none}
+.tabs{pointer-events:auto;width:100%;max-width:420px;display:flex;align-items:center;gap:6px;background:var(--dark);border:1px solid var(--line);border-radius:32px;padding:8px}
+.tabs button{flex:1;height:52px;border:0;border-radius:24px;background:transparent;color:#ecc9db;display:flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:700}
+.tabs button[aria-selected=true]{background:var(--hero);color:#1c0b14}
+.tabs .fab{flex:none;width:64px;height:64px;margin:-32px 4px 0;border-radius:50%;background:var(--pink);color:#1c0b14;border:5px solid var(--bg)}
+.tabs .fab[aria-selected=true]{background:var(--hero)}
+.tabs svg{width:22px;height:22px}
+@media(min-width:700px){.app{max-width:720px;padding:36px 28px 8px}.hero{padding:30px 28px 34px}.hero h1{font-size:36px}.card{padding:28px}#label{font-size:58px}.bar .n{width:110px}}
+
+body{padding-bottom:0}#s-app{padding-bottom:132px}.screen[hidden]{display:none}
+.intro{display:flex;flex-direction:column;height:100vh;height:100dvh;max-width:520px;margin:0 auto;padding:12px 20px calc(20px + env(safe-area-inset-bottom,0px))}
+.skip{align-self:flex-end;border:0;background:none;color:var(--pink-d);font-weight:700;padding:10px 4px;min-height:44px}
+.track{flex:1;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch}.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 100%;scroll-snap-align:center;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
+.slide svg{width:100%;max-width:340px;height:auto}
+.slide h2{font-size:28px;line-height:1.15;font-weight:800;letter-spacing:-.03em;margin:16px 0 8px}.slide p{color:var(--muted);margin:0;max-width:320px}
+.dots{display:flex;gap:8px;justify-content:center;margin:14px 0}.dot{width:8px;height:8px;border-radius:99px;background:var(--line);transition:width .25s}.dot.on{width:26px;background:var(--pink)}
+.pad{max-width:480px;margin:0 auto;padding:24px 18px 40px}
+.pad h1{font-size:30px;line-height:1.15;font-weight:800;letter-spacing:-.03em;margin:18px 0 6px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--pink-l);border-radius:99px;padding:4px;margin:18px 0 4px}
+.seg button{border:0;border-radius:99px;height:44px;background:transparent;font-weight:700;color:var(--muted)}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 2px 8px rgba(190,24,93,.14)}
+.or{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:12px;margin:16px 0}.or:before,.or:after{content:"";flex:1;height:1px;background:var(--line)}
+.btn.alt{background:var(--surface);color:var(--ink);border:2px solid var(--line)}
+.g{font-weight:800;font-size:20px;background:linear-gradient(135deg,#4285f4 0 30%,#ea4335 30% 55%,#fbbc05 55% 75%,#34a853 75%);-webkit-background-clip:text;background-clip:text;color:transparent;margin-right:8px}
+.wrapc{display:flex;flex-wrap:wrap;gap:8px}
+.tc{padding:10px 16px;min-height:44px;border-radius:99px;border:2px solid var(--line);background:var(--surface);color:var(--ink);font-weight:600;font-size:14px}
+.tc[aria-pressed=true]{background:var(--dark);border-color:var(--dark);color:#fff}
+.opt{width:100%;text-align:left;padding:14px 16px;margin-bottom:8px;border-radius:20px;border:2px solid var(--line);background:var(--surface);color:var(--ink);display:flex;flex-direction:column}
+.opt b{font-size:15px}.opt small{color:var(--muted);font-size:12px}
+.opt[aria-pressed=true]{border-color:var(--ink);background:var(--pink-l)}
+.avatar{width:84px;height:84px;border-radius:50%;background:var(--hero);display:grid;place-items:center;font-size:34px;font-weight:800;color:#1c0b14;margin:6px auto 10px}
+.pc{text-align:center}.pc h2{margin:0;font-size:24px;font-weight:800;letter-spacing:-.02em}.pc .wrapc{justify-content:center}
+.row2{display:flex;justify-content:space-between;gap:12px;padding:14px 0;border-top:1px solid var(--line);font-size:14px}.row2 span:first-child{color:var(--muted)}
+.tabwrap{padding-bottom:calc(14px + env(safe-area-inset-bottom,0px))}
+.tabs{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:0;padding:8px;max-width:400px;border-radius:999px;background:rgba(255,255,255,.5);border:1px solid rgba(255,255,255,.75);-webkit-backdrop-filter:blur(22px) saturate(190%);backdrop-filter:blur(22px) saturate(190%);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.95),inset 0 -1.5px 2px rgba(236,72,153,.22),0 14px 34px rgba(190,24,93,.24)}
+.tabs::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 46%);pointer-events:none}
+.lens{position:absolute;top:8px;bottom:8px;left:8px;width:calc((100% - 16px)/4);border-radius:999px;background:rgba(255,255,255,.62);border:1px solid rgba(255,255,255,.9);box-shadow:inset 0 1px 1px #fff,0 6px 16px rgba(236,72,153,.28);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);transition:transform .45s cubic-bezier(.34,1.45,.64,1)}
+.tabs button{position:relative;z-index:1;height:56px;flex-direction:column;gap:2px;padding:0;background:transparent;color:var(--muted);font-size:11px}
+.tabs button[aria-selected=true]{background:transparent;color:var(--pink-d)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .tabs{background:rgba(40,16,30,.5);border-color:rgba(255,255,255,.18);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.3),0 14px 34px rgba(0,0,0,.5)}:root:not([data-theme="light"]) .lens{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.3)}}
+@media(prefers-reduced-motion:reduce){.lens,.dot{transition:none}}
+
+/* ---- soft pink glass system ---- */
+:root{--bgbase:#fdeef5;--b1:#f9b8d4;--b2:#fbc4dc;--glass:rgba(255,255,255,.58);--glass-b:rgba(255,255,255,.88);--field:rgba(255,255,255,.64);--sh:0 10px 30px rgba(236,72,153,.12);--line:rgba(236,72,153,.18);--btn-g:linear-gradient(180deg,#5b3a4c,#2d1522);--btn-t:#fff}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bgbase:#1b0e16;--b1:#5a1f3f;--b2:#3d1730;--glass:rgba(255,255,255,.07);--glass-b:rgba(255,255,255,.14);--field:rgba(255,255,255,.08);--sh:none;--line:rgba(255,255,255,.14);--btn-g:linear-gradient(180deg,#f472b6,#db2777)}}
+body{background:transparent}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(70% 38% at 100% 0,var(--b1),transparent 72%),radial-gradient(60% 36% at 0 100%,var(--b2),transparent 72%),radial-gradient(45% 28% at 0 14%,var(--b2),transparent 72%),var(--bgbase)}
+.card,.hero,.rrow{background:var(--glass);border:1px solid var(--glass-b);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 1px 0 var(--glass-b),var(--sh)}
+.card{border-radius:30px}
+.card.dark{background:linear-gradient(160deg,#3a2030,#1c0b14);border-color:rgba(255,255,255,.12)}
+.advice{background:rgba(251,207,232,.55)}
+input{background:var(--field);border:1.5px solid var(--line);border-radius:18px}
+.btn{height:60px;font-size:18px;background:var(--btn-g);color:var(--btn-t);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 12px 24px rgba(45,21,34,.28)}
+.btn.ghost{height:52px;background:rgba(251,207,232,.45);color:var(--pink-d);border:1.5px solid rgba(236,72,153,.35);box-shadow:none}
+.btn.alt{background:var(--field);color:var(--ink);border:1.5px solid var(--line);box-shadow:none}
+.top{margin-bottom:16px}.top .wordmark{font-size:30px}.top .small{font-size:14px}
+.logo{width:54px;height:54px;border-radius:18px;background:var(--glass);border:1px solid var(--glass-b);box-shadow:inset 0 1px 0 var(--glass-b),var(--sh)}.logo svg{width:28px;height:28px}
+.pill{display:flex;align-items:center;gap:6px;padding:8px 14px;letter-spacing:0;font-size:13px;font-weight:600;background:var(--glass);color:var(--pink-d);border:1px solid var(--glass-b)}.pill svg{width:16px;height:16px}
+.spark{width:14px;height:14px;margin:-14px 0 0 -2px;color:var(--pink)}
+.hero{border-radius:34px;color:var(--ink);min-height:178px;padding:22px 20px}
+.hero::before{content:"";position:absolute;right:-40px;top:-30px;width:70%;height:140%;background:radial-gradient(closest-side,rgba(249,168,212,.6),transparent)}
+.hero::after{display:none}
+.hero>*{position:relative}.hero .tag{background:rgba(251,207,232,.95);color:var(--ink);font-weight:700}
+.hero h1{max-width:58%;font-size:26px}.hero p{max-width:54%;color:var(--muted)}
+.hero .art{position:absolute;right:-6px;bottom:-2px;width:46%;max-width:210px;height:auto}
+.ttl{display:flex;align-items:center;gap:8px;margin:0 0 14px;font-size:16px;font-weight:700}.ttl svg{width:20px;height:20px;color:var(--pink)}
+.ttl i{width:12px;height:12px;border-radius:50%;background:var(--pink);margin:0 4px 0 2px}
+.chips{gap:12px}.chip{position:relative;min-height:122px;border:1.5px solid transparent;border-radius:24px;background:var(--field);justify-content:center;gap:6px}
+.chip svg{width:58px;height:58px;padding:0;background:none;border-radius:0}.chip[aria-pressed=true] svg{background:none}
+.chip[aria-pressed=true]{border-color:var(--pink);background:rgba(251,207,232,.6);box-shadow:0 8px 20px rgba(236,72,153,.22)}
+.chip[aria-pressed=true]::after{content:"✓";position:absolute;top:-8px;right:-6px;width:26px;height:26px;border-radius:50%;background:var(--pink);color:#fff;font-weight:800;font-size:14px;display:grid;place-items:center}
+.chip b{font-weight:600}
+.ch{display:flex;justify-content:space-between;align-items:flex-start}.clock{width:74px;height:74px;margin:-8px -4px 0 0}
+.bigv{font-size:20px;font-weight:700}.bigv b{font-size:42px;font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.ends{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin:8px 2px 0}
+input[type=range]{-webkit-appearance:none;appearance:none;height:8px;padding:0;border:0;border-radius:99px;background:linear-gradient(90deg,#f472b6 var(--p,50%),rgba(236,72,153,.16) var(--p,50%))}
+input[type=range]:focus{box-shadow:none}input[type=range]:focus-visible{outline:3px solid var(--ring);outline-offset:6px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:#fff;border:3px solid #ec4899;box-shadow:0 3px 10px rgba(236,72,153,.35)}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:#fff;border:3px solid #ec4899}
+.rrow{position:relative;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;min-height:58px;padding:9px 10px 9px 16px;margin-bottom:10px;border-radius:999px}
+.aft{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:600;white-space:nowrap}
+.aft input{width:46px;height:34px;padding:0;text-align:center;font-size:16px;font-weight:700;border-radius:12px}
+.tp{display:flex;align-items:center;gap:2px;height:42px;padding:0 14px;border-radius:999px;background:rgba(251,207,232,.75)}
+.tp input{width:42px;height:36px;padding:0;border:0;background:transparent;text-align:right;font-size:16px;font-weight:800;border-radius:0;box-shadow:none}.tp em{font-style:normal;font-weight:700}
+.x2{position:absolute;top:-7px;right:2px;width:24px;height:24px;border-radius:50%;border:1px solid var(--glass-b);background:var(--surface);color:var(--muted);font-size:15px;line-height:1;padding:0}
+.card.tcard{position:relative;overflow:hidden}.flask{position:absolute;left:12px;bottom:10px;width:54px;height:64px}
+#add{width:calc(100% - 70px);margin-left:auto;display:block}
+.tabs{background:rgba(255,255,255,.46)}
+.lens{background:linear-gradient(180deg,rgba(255,255,255,.85),rgba(251,207,232,.7));border-color:rgba(255,255,255,.95)}
+
+.hero .tag{color:#2a0f1e}
+@media (prefers-color-scheme:dark){
+:root:not([data-theme="light"]) .hero::before{background:radial-gradient(closest-side,rgba(236,72,153,.3),transparent)}
+:root:not([data-theme="light"]) .advice{background:rgba(236,72,153,.16)}
+:root:not([data-theme="light"]) .tp{background:rgba(236,72,153,.26)}
+:root:not([data-theme="light"]) .chip[aria-pressed=true]{background:rgba(236,72,153,.22)}
+:root:not([data-theme="light"]) .btn.ghost{background:rgba(236,72,153,.14);border-color:rgba(244,114,182,.45)}
+}
+</style></head>
+<body>
+<div class="screen" id="s-intro" hidden><div class="intro"><button class="skip" id="skip" type="button">Skip</button>
+<div class="track" id="track">
+<div class="slide"><svg viewBox="0 0 320 260" role="img" aria-label="Steaming bowl of rice"><circle cx="160" cy="132" r="108" fill="#fce7f3"/><circle cx="176" cy="148" r="78" fill="#fbcfe8"/><path d="M120 92c-10-12 10-18 0-32M160 84c-10-12 10-18 0-34M200 92c-10-12 10-18 0-32" fill="none" stroke="#ec4899" stroke-width="6" stroke-linecap="round"/><path d="M92 142a68 56 0 0 1 136 0z" fill="#fff"/><g fill="#fbcfe8"><ellipse cx="130" cy="122" rx="7" ry="3.5" transform="rotate(-20 130 122)"/><ellipse cx="160" cy="112" rx="7" ry="3.5"/><ellipse cx="190" cy="124" rx="7" ry="3.5" transform="rotate(25 190 124)"/><ellipse cx="150" cy="132" rx="7" ry="3.5" transform="rotate(10 150 132)"/><ellipse cx="176" cy="136" rx="7" ry="3.5" transform="rotate(-15 176 136)"/></g><path d="M76 142h168a84 78 0 0 1-168 0z" fill="#1c0b14"/><path d="M92 166h136" stroke="#f472b6" stroke-width="7" stroke-linecap="round"/><rect x="128" y="212" width="64" height="12" rx="6" fill="#1c0b14"/><path d="M258 66l5 12 12 5-12 5-5 12-5-12-12-5 12-5zM58 168l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#f472b6"/><circle cx="250" cy="190" r="7" fill="#fff" stroke="#1c0b14" stroke-width="4"/><circle cx="64" cy="94" r="5" fill="#1c0b14"/></svg><h2>Is your food still good to eat?</h2><p>LuFood estimates food safety risk from how long, and at what temperatures, your food was kept.</p></div>
+<div class="slide"><svg viewBox="0 0 320 260" role="img" aria-label="Clock and thermometer"><rect x="44" y="26" width="232" height="208" rx="80" fill="#fce7f3"/><circle cx="160" cy="130" r="92" fill="#fbcfe8" opacity=".7"/><circle cx="122" cy="126" r="54" fill="#fff" stroke="#1c0b14" stroke-width="6"/><path d="M122 126V94M122 126l22 14" stroke="#1c0b14" stroke-width="6" stroke-linecap="round"/><circle cx="122" cy="126" r="6" fill="#ec4899"/><path d="M122 80v6M122 166v6M76 126h6M162 126h6" stroke="#f472b6" stroke-width="5" stroke-linecap="round"/><rect x="204" y="48" width="34" height="122" rx="17" fill="#fff" stroke="#1c0b14" stroke-width="6"/><circle cx="221" cy="184" r="26" fill="#ec4899" stroke="#1c0b14" stroke-width="6"/><rect x="215" y="92" width="12" height="90" rx="6" fill="#ec4899"/><path d="M250 76h14M250 100h10M250 124h14" stroke="#1c0b14" stroke-width="5" stroke-linecap="round"/><path d="M34 222c30-26 52 8 82-14s52-22 86-48" fill="none" stroke="#1c0b14" stroke-width="5" stroke-linecap="round" stroke-dasharray="2 12"/><circle cx="270" cy="52" r="8" fill="#f472b6"/><path d="M52 62l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="#f472b6"/></svg><h2>Time and temperature, tracked</h2><p>Add readings from cooking and storage. We add up the time spent in the danger zone.</p></div>
+<div class="slide"><svg viewBox="0 0 320 260" role="img" aria-label="Shield with a check mark"><circle cx="160" cy="130" r="108" fill="#fce7f3"/><circle cx="160" cy="130" r="82" fill="none" stroke="#fbcfe8" stroke-width="10"/><path d="M160 46l68 24v58c0 46-32 76-68 90-36-14-68-44-68-90V70z" fill="#f472b6" stroke="#1c0b14" stroke-width="6" stroke-linejoin="round"/><path d="M160 46l68 24v58c0 46-32 76-68 90z" fill="#ec4899" opacity=".55"/><path d="M126 132l24 24 44-48" fill="none" stroke="#1c0b14" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/><path d="M126 132l24 24 44-48" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M262 80l5 12 12 5-12 5-5 12-5-12-12-5 12-5zM52 176l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#f472b6"/><ellipse cx="62" cy="86" rx="14" ry="7" transform="rotate(-35 62 86)" fill="#1c0b14"/><circle cx="268" cy="196" r="7" fill="#fff" stroke="#1c0b14" stroke-width="4"/></svg><h2>Clear advice, explained</h2><p>See why you got a result and what to do next. A decision-support tool, never a guarantee.</p></div>
+</div><div class="dots"><i class="dot on"></i><i class="dot"></i><i class="dot"></i></div><button class="btn" id="next" type="button">Next</button></div></div>
+
+<div class="screen" id="s-auth" hidden><div class="pad"><div class="top" style="margin:0"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#1c0b14" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V4a2 2 0 0 0-4 0v10.76a4 4 0 1 0 4 0z"/></svg></div><div class="wordmark">LuFood</div></div><h1 id="at">Create your account</h1><p class="sub" id="as">Save your profile and assessments on this device.</p>
+<div class="seg"><button type="button" data-m="up" aria-pressed="true">Sign up</button><button type="button" data-m="in" aria-pressed="false">Log in</button></div>
+<label class="f" for="em">Email</label><input id="em" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com">
+<label class="f" for="pw">Password</label><input id="pw" type="password" autocomplete="new-password" placeholder="At least 6 characters">
+<div id="amsg" role="alert" style="min-height:22px;margin-top:8px;font-size:14px;color:var(--high)"></div>
+<button class="btn" id="goem" type="button">Continue with email</button>
+<div class="or">or</div>
+<button class="btn alt" id="goog" type="button"><span class="g">G</span>Continue with Google</button>
+<p class="note">Prototype only: sign-in is simulated on this device. Nothing is sent to a server and your password is not stored.</p></div></div>
+
+<div class="screen" id="s-setup" hidden><div class="pad"><div class="top" style="margin:0"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#1c0b14" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V4a2 2 0 0 0-4 0v10.76a4 4 0 1 0 4 0z"/></svg></div><div class="wordmark">LuFood</div></div><h1>Tell us about you</h1><p class="sub">A few quick details to personalise LuFood.</p>
+<label class="f" for="nm">Your name</label><input id="nm" type="text" autocomplete="given-name" placeholder="e.g. Zim" maxlength="40">
+<label class="f">Allergy preferences</label><div class="wrapc" id="alg"><button type="button" class="tc" data-a="No allergies" aria-pressed="false">No allergies</button><button type="button" class="tc" data-a="Peanuts" aria-pressed="false">Peanuts</button><button type="button" class="tc" data-a="Tree nuts" aria-pressed="false">Tree nuts</button><button type="button" class="tc" data-a="Milk" aria-pressed="false">Milk</button><button type="button" class="tc" data-a="Eggs" aria-pressed="false">Eggs</button><button type="button" class="tc" data-a="Fish" aria-pressed="false">Fish</button><button type="button" class="tc" data-a="Shellfish" aria-pressed="false">Shellfish</button><button type="button" class="tc" data-a="Soy" aria-pressed="false">Soy</button><button type="button" class="tc" data-a="Wheat" aria-pressed="false">Wheat</button><button type="button" class="tc" data-a="Sesame" aria-pressed="false">Sesame</button></div>
+<label class="f">How often do you cook?</label><div id="cook"><button type="button" class="opt" data-c="rare" aria-pressed="false"><b>Rarely</b><small>0–1 times a week</small></button><button type="button" class="opt" data-c="some" aria-pressed="false"><b>Sometimes</b><small>2–3 times a week</small></button><button type="button" class="opt" data-c="often" aria-pressed="false"><b>Often</b><small>4–6 times a week</small></button><button type="button" class="opt" data-c="daily" aria-pressed="false"><b>Every day</b><small>7 or more times a week</small></button></div>
+<div id="smsg" role="alert" style="min-height:22px;margin-top:6px;font-size:14px;color:var(--high)"></div>
+<button class="btn" id="fin" type="button">Finish</button><button class="btn ghost" id="cancel" type="button" hidden>Cancel</button></div></div>
+
+<div class="screen" id="s-app" hidden><div class="app">
+<header class="top"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#e0457b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M10 8v3.5M8.5 8v3a1.5 1.5 0 0 0 3 0V8M10 11.5V16M14.5 8c-1.2 0-1.8 1.3-1.8 3 0 1.2.6 1.8 1.8 1.8V16"/></svg></div><div><div class="wordmark">LuFood</div><div class="small">Food safety made simple.</div></div><span class="pill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11h16v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M4 13H2M20 13h2M9 7c0-1.5 1.5-1.5 1.5-3M14 7c0-1.5 1.5-1.5 1.5-3"/></svg>Prototype</span></header>
+
+<section class="view on" id="v-assess">
+<div class="hero"><span class="tag" id="hi">New assessment</span><h1>Check how your food was stored</h1><p>Add the time and temperatures to get a risk estimate.</p><svg class="art" viewBox="0 0 200 170" aria-hidden="true"><rect x="20" y="72" width="140" height="78" rx="14" fill="#ead7f5" stroke="#cdb4e6" stroke-width="2"/><path d="M44 114c4-14 24-20 44-14 16 4 34 2 44 8 8 5 6 18-6 24-14 7-40 8-58 4-20-4-28-12-24-22z" fill="#f27c8d"/><path d="M62 114c10-4 22 0 32-2M92 128c12 2 26-2 34-8" fill="none" stroke="#f9b5be" stroke-width="3" stroke-linecap="round"/><rect x="14" y="54" width="152" height="30" rx="12" fill="#f1e3fa" stroke="#cdb4e6" stroke-width="2"/><rect x="152" y="64" width="14" height="30" rx="5" fill="#e0c9f0"/><path d="M30 92v44" stroke="#fff" stroke-width="4" stroke-linecap="round" opacity=".7"/><path d="M150 98l26 9v22c0 17-12 28-26 34-14-6-26-17-26-34v-22z" fill="#ec4899" stroke="#fff" stroke-width="5" stroke-linejoin="round"/><path d="M138 130l9 9 17-19" fill="none" stroke="#fff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><path d="M28 30l8 8M46 18l2 10" stroke="#ec4899" stroke-width="4" stroke-linecap="round"/></svg></div>
+<div class="card"><p class="ttl"><i></i>Food</p>
+<div class="chips"><button class="chip" type="button" data-v="chicken" aria-pressed="true"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M40 8c11-2 19 7 16 18-2 7-8 12-15 13-4 1-8 0-11-3l-4-4c-3-3-4-8-3-12 1-7 7-11 17-12z" fill="#e8934f"/><path d="M38 14c6-1 11 2 12 7" fill="none" stroke="#f6b983" stroke-width="4" stroke-linecap="round"/><path d="M27 37 13 51" stroke="#fbe9dc" stroke-width="7" stroke-linecap="round"/><circle cx="11" cy="52" r="5" fill="#fbe9dc"/><circle cx="16" cy="57" r="5" fill="#fbe9dc"/></svg><b>Chicken</b></button><button class="chip" type="button" data-v="rice" aria-pressed="false"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M12 30a20 17 0 0 1 40 0z" fill="#fff8f3" stroke="#eed9cf" stroke-width="2"/><g fill="#f3dfd6"><ellipse cx="24" cy="22" rx="3.5" ry="1.8" transform="rotate(-20 24 22)"/><ellipse cx="33" cy="18" rx="3.5" ry="1.8"/><ellipse cx="41" cy="23" rx="3.5" ry="1.8" transform="rotate(25 41 23)"/><ellipse cx="32" cy="26" rx="3.5" ry="1.8"/></g><path d="M6 30h52a26 24 0 0 1-52 0z" fill="#5b3a4a"/><path d="M14 40h36" stroke="#f472b6" stroke-width="3" stroke-linecap="round"/><path d="M24 56h16" stroke="#5b3a4a" stroke-width="4" stroke-linecap="round"/></svg><b>Rice</b></button><button class="chip" type="button" disabled><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M5 32c8-11 23-13 33-4l13-9v26l-13-9C28 45 13 43 5 32z" fill="#8ea7c9"/><path d="M12 35c8 6 18 6 26-1-9 7-19 8-26 1z" fill="#c4d3e8"/><path d="M22 22c4-3 9-3 13 0" fill="none" stroke="#6f89b0" stroke-width="3" stroke-linecap="round"/><circle cx="16" cy="30" r="2.4" fill="#2d1522"/></svg><b>Seafood</b><small>coming soon</small></button></div></div>
+<div class="card tcard"><div class="ch"><div><p class="ttl"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>Hours since it was prepared</p><div class="bigv"><b id="totv">3</b> h</div></div><svg class="clock" viewBox="0 0 80 80" aria-hidden="true"><circle cx="22" cy="14" r="8" fill="#f472b6"/><circle cx="58" cy="14" r="8" fill="#f9a8d4"/><circle cx="40" cy="44" r="28" fill="#f472b6"/><circle cx="40" cy="44" r="22" fill="#fff"/><path d="M40 44V30M40 44l10 6" stroke="#be185d" stroke-width="4" stroke-linecap="round"/><circle cx="40" cy="44" r="3" fill="#be185d"/><path d="M40 25v3M40 60v3M21 44h3M56 44h3" stroke="#f9a8d4" stroke-width="3" stroke-linecap="round"/></svg></div>
+<input id="total" type="range" min="0.25" max="24" step="0.25" value="3" aria-label="Hours since it was prepared"><div class="ends"><span>0</span><span>24</span></div>
+<p class="ttl" style="margin-top:24px"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V4a2 2 0 0 0-4 0v10.76a4 4 0 1 0 4 0z"/></svg>Temperature readings</p>
+<div id="rows"></div>
+<button class="btn ghost" id="add" type="button">+ Add reading</button><svg class="flask" viewBox="0 0 64 64" aria-hidden="true"><path d="M24 14c-3-3 3-5 0-9M32 14c-3-3 3-5 0-9M40 14c-3-3 3-5 0-9" fill="none" stroke="#f472b6" stroke-width="3" stroke-linecap="round"/><path d="M14 30a18 11 0 0 1 36 0z" fill="#f9a8d4"/><circle cx="32" cy="18" r="3.2" fill="#ec4899"/><path d="M10 34H5M54 34h5" stroke="#5b3a4a" stroke-width="4" stroke-linecap="round"/><path d="M10 30h44v18a8 8 0 0 1-8 8H18a8 8 0 0 1-8-8z" fill="#5b3a4a"/><rect x="15" y="36" width="5" height="12" rx="2.5" fill="#fff" opacity=".25"/><path d="M18 60h28" stroke="#f9a8d4" stroke-width="3" stroke-linecap="round"/></svg>
+<div id="msg" role="alert"></div></div>
+<button class="btn" id="go" type="button">Assess risk →</button>
+</section>
+
+<section class="view" id="v-result">
+<div class="card" id="empty"><p class="eyebrow">Result</p><p class="sub" style="margin:0 0 14px">No assessment yet.</p><button class="btn" type="button" data-go="assess">Start an assessment</button></div>
+<div id="resbody" hidden>
+<div class="card summary dark"><p class="eyebrow">Estimated risk</p><div id="label"></div>
+<div class="meter" id="meter" data-k="0"><i></i><i></i><i></i></div><div class="mlabels"><span>Low</span><span>Moderate</span><span>High</span></div>
+<div class="probs" id="probs"></div><p class="small" id="src" style="margin:14px 0 0;color:rgba(255,255,255,.6)"></p></div>
+<div class="stats" id="stats"></div>
+<div class="card advice"><p class="eyebrow">What to do</p><p id="rec"></p></div>
+<div class="card"><p class="eyebrow">Temperature history</p><div id="chart"></div></div>
+<div class="card"><p class="eyebrow">Why this result</p><div id="why"></div></div>
+</div></section>
+
+<section class="view" id="v-hist"><div class="card"><p class="eyebrow">Past assessments</p><div id="hist"></div><button class="btn ghost" id="clear" type="button">Clear history</button></div></section>
+
+<section class="view" id="v-profile"><div class="card pc"><div class="avatar" id="av">?</div><h2 id="pn"></h2><p class="sub" id="pe"></p></div>
+<div class="card"><p class="eyebrow">Allergy preferences</p><div class="wrapc" id="pa"></div><div class="row2" style="margin-top:14px"><span>Cooks</span><b id="pcook"></b></div>
+<p class="small" style="margin:10px 0 0">Saved on this device. Allergy preferences are not used in risk estimates yet, and LuFood cannot detect allergens in food.</p></div>
+<button class="btn ghost" id="edit" type="button" style="margin:0 0 8px">Edit profile</button><button class="btn ghost" id="out" type="button" style="margin:0 0 8px">Log out</button></section>
+<p class="note">LuFood is a decision-support prototype, not a guarantee that food is safe. It cannot detect pathogens, toxins, allergens or chemicals, and a low risk does not mean the food is safe. The model was trained on simulated data with placeholder growth parameters and has not been validated against real microbiological data.</p>
+</div>
+<div class="tabwrap"><nav class="tabs" aria-label="Main"><i class="lens" id="lens"></i>
+<button type="button" data-go="assess" aria-selected="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 16a8 8 0 1 1 16 0"/><path d="M12 16l4-5"/></svg>Assess</button>
+<button type="button" data-go="result" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 20v-7M12 20V5M18 20v-11"/></svg>Results</button>
+<button type="button" data-go="hist" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>History</button>
+<button type="button" data-go="profile" aria-selected="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>Profile</button>
+</nav></div>
+</div>
+<script>
+const M={"features":["latest_temp","mean_temp","max_temp","temp_range","total_hours","danger_hours","food_cooked chicken","food_cooked rice"],"mean":[15.851,22.204,34.255,19.956,4.509,2.761,0.51,0.49],"scale":[13.51,14.72,23.44,16.278,2.034,2.344,0.5,0.5],"coef":[[-1.625,-1.214,-2.29,-0.986,-3.234,-6.112,-1.165,1.165],[0.324,0.249,0.364,0.251,-0.849,2.048,-0.194,0.194],[1.301,0.966,1.926,0.735,4.084,4.064,1.359,-1.359]],"intercept":[11.22,2.01,-13.23]};
+const NAMES={latest_temp:"Latest temperature",mean_temp:"Average temperature",max_temp:"Highest temperature",temp_range:"Temperature swing",total_hours:"Total storage time",danger_hours:"Time in 5–60 °C danger zone","food_cooked chicken":"Food: cooked chicken","food_cooked rice":"Food: cooked rice"};
+const LBL=["low","moderate","high"],COL=["var(--low)","var(--mod)","var(--high)"];
+const FOODNAME={chicken:"Cooked chicken",rice:"Cooked rice"};
+const REC={low:"Time in the danger zone is short. Refrigerate promptly at 5 °C or below and finish it within a day or two.",
+moderate:"This food has spent a notable time in the danger zone. Eat it right away, or discard it if you’re unsure. Don’t put it back in the fridge to eat later.",
+high:"Long exposure to unsafe temperatures. Discard it. Reheating will not remove toxins that some bacteria, such as B. cereus, can produce."};
+const FOODREC={chicken:" Keep cooked chicken at 60 °C or above, or at 5 °C or below.",rice:" Cool cooked rice quickly and refrigerate it within an hour or two."};
+const $=id=>document.getElementById(id);
+let rows=[[0,28],[1,31],[2,30]],mem=[];
+
+function store(get,val){try{if(get)return JSON.parse(localStorage.getItem("lufood_hist")||"[]");localStorage.setItem("lufood_hist",JSON.stringify(val))}catch(e){if(get)return mem;mem=val}}
+const fill=el=>el.style.setProperty("--p",((el.value-el.min)/(el.max-el.min)*100)+"%");
+function renderRows(){$("rows").innerHTML=rows.map((r,i)=>`<div class="rrow"><label class="aft">After <input type="number" inputmode="decimal" step="0.25" min="0" value="${r[0]}" data-i="${i}" data-k="0" aria-label="Hours after preparation"> h</label><input class="rng" type="range" min="-20" max="100" step="1" value="${r[1]}" data-i="${i}" data-k="1" aria-label="Temperature"><span class="tp"><input type="number" inputmode="decimal" step="1" value="${r[1]}" data-i="${i}" data-k="1" aria-label="Temperature in °C"><em>°C</em></span>${rows.length>1?`<button class="x2" type="button" data-del="${i}" aria-label="Remove reading">×</button>`:""}</div>`).join("");document.querySelectorAll("#rows .rng").forEach(fill)}
+$("rows").addEventListener("input",e=>{const t=e.target;if(t.dataset.i===undefined)return;const v=parseFloat(t.value);rows[+t.dataset.i][+t.dataset.k]=v;
+ if(t.dataset.k==="1"){const row=t.closest(".rrow");row.querySelectorAll('[data-k="1"]').forEach(o=>{if(o!==t&&isFinite(v))o.value=v});fill(row.querySelector(".rng"))}});
+$("total").addEventListener("input",()=>{$("totv").textContent=+$("total").value;fill($("total"))});fill($("total"));
+$("rows").addEventListener("click",e=>{const d=e.target.dataset.del;if(d!==undefined&&rows.length>1){rows.splice(+d,1);renderRows()}});
+$("add").onclick=()=>{const l=rows[rows.length-1];rows.push([l[0]+1,l[1]]);renderRows()};
+
+function features(food,rd,total){
+ rd=[...rd].sort((a,b)=>a[0]-b[0]);const temps=rd.map(r=>r[1]);let dz=0;
+ rd.forEach((r,i)=>{const nx=i+1<rd.length?rd[i+1][0]:total;if(r[1]>5&&r[1]<60)dz+=Math.max(0,nx-r[0])});
+ return{latest_temp:temps[temps.length-1],mean_temp:temps.reduce((a,b)=>a+b,0)/temps.length,max_temp:Math.max(...temps),temp_range:Math.max(...temps)-Math.min(...temps),total_hours:total,danger_hours:dz,"food_cooked chicken":food==="chicken"?1:0,"food_cooked rice":food==="rice"?1:0};
+}
+function predict(f){
+ const z=M.features.map((k,j)=>(f[k]-M.mean[j])/M.scale[j]);
+ const lg=M.coef.map((c,k)=>c.reduce((s,w,j)=>s+w*z[j],M.intercept[k]));
+ const mx=Math.max(...lg),ex=lg.map(v=>Math.exp(v-mx)),sm=ex.reduce((a,b)=>a+b,0);
+ const contrib=M.features.map((k,j)=>({k,v:(M.coef[2][j]-M.coef[0][j])*z[j]})).sort((a,b)=>Math.abs(b.v)-Math.abs(a.v));
+ return{p:ex.map(v=>v/sm),contrib};
+}
+function chart(rd,total){
+ rd=[...rd].sort((a,b)=>a[0]-b[0]);const W=420,H=240,L=40,R=10,T=10,B=28;
+ const ymax=Math.max(70,...rd.map(r=>r[1]+5)),ymin=Math.min(0,...rd.map(r=>r[1]-2));
+ const x=h=>L+(W-L-R)*h/total,y=t=>T+(H-T-B)*(1-(t-ymin)/(ymax-ymin));
+ let d="";rd.forEach((r,i)=>{d+=i?`H${x(r[0])} V${y(r[1])} `:`M${x(r[0])} ${y(r[1])} `});d+=`H${x(total)}`;
+ return `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Temperature history chart"><rect x="${L}" y="${y(60)}" width="${W-L-R}" height="${y(5)-y(60)}" fill="var(--pink)" opacity=".14"/>
+ <text x="${L+4}" y="${y(60)+13}" font-size="13" fill="var(--muted)">Danger zone 5–60 °C</text>
+ <line x1="${L}" x2="${W-R}" y1="${H-B}" y2="${H-B}" stroke="var(--muted)" opacity=".5"/><line x1="${L}" x2="${L}" y1="${T}" y2="${H-B}" stroke="var(--muted)" opacity=".5"/>
+ <path d="${d}" fill="none" stroke="var(--pink)" stroke-width="3" stroke-linejoin="round"/>
+ ${rd.map(r=>`<circle cx="${x(r[0])}" cy="${y(r[1])}" r="5" fill="var(--surface)" stroke="var(--pink-d)" stroke-width="2.5"/>`).join("")}
+ <text x="${L}" y="${H-8}" font-size="13" fill="var(--muted)">0 h</text><text x="${W-R}" y="${H-8}" font-size="13" fill="var(--muted)" text-anchor="end">${total} h</text>
+ <text x="${L-6}" y="${y(60)+4}" font-size="13" fill="var(--muted)" text-anchor="end">60</text><text x="${L-6}" y="${y(5)+4}" font-size="13" fill="var(--muted)" text-anchor="end">5</text></svg>`;
+}
+function renderHist(){
+ const h=store(true);
+ $("hist").innerHTML=h.length?h.map(e=>`<div class="hist"><span>${FOODNAME[e.food]} · ${e.total} h · ${e.dz.toFixed(1)} h in danger zone<br><span class="small">${new Date(e.t).toLocaleString()}</span></span><b class="${e.label}">${e.label[0].toUpperCase()+e.label.slice(1)}</b></div>`).join(""):'<p class="small">No assessments yet.</p>';
+}
+$("clear").onclick=()=>{store(false,[]);renderHist();remoteClear()};
+$("go").onclick=async()=>{
+ const food=FOOD,total=parseFloat($("total").value),msg=$("msg");msg.textContent="";
+ if(!(total>0)||rows.some(r=>!isFinite(r[0])||!isFinite(r[1])||r[0]<0)){msg.textContent="Please fill in every reading and a total time above 0.";return}
+ if(Math.max(...rows.map(r=>r[0]))>total){msg.textContent="A reading is later than the assessment time.";return}
+ const f=features(food,rows,total);let{p,contrib}=predict(f),src="In-browser model";let R=null;try{R=window.LuCore?window.LuCore.assess(food,total,rows.map(r=>[r[0],r[1]])):await api("/api/assess",{method:"POST",body:JSON.stringify({food,total_hours:total,readings:rows.map(r=>({hour:r[0],temp_c:r[1]}))})})}catch(e){R=null}if(R){p=LBL.map(n=>R.probabilities[n]);contrib=R.contributions.map(c=>({k:c.feature,v:c.value}));src=R.model.name+(window.LuCore?" on this device":" via LuFood API")}const km=p.indexOf(Math.max(...p)),rk=f.danger_hours<=2?0:f.danger_hours<=4?1:2,k=Math.max(km,rk),label=LBL[k];if(rk>km)src+=". Showing the more cautious of the model and the 2-hour/4-hour guideline.";if(window.LuCore&&R)remoteSave(food,total,rows,label,R);
+ $("empty").hidden=true;$("resbody").hidden=false;
+ $("label").innerHTML=`<span class="${label}">${label[0].toUpperCase()+label.slice(1)}</span>`;
+ $("probs").innerHTML=LBL.map((n,i)=>`<div class="bar"><span class="n">${n[0].toUpperCase()+n.slice(1)}</span><span class="t"><i style="width:${(p[i]*100).toFixed(0)}%;background:${COL[i]}"></i></span><span class="v">${(p[i]*100).toFixed(0)}%</span></div>`).join("");
+ $("chart").innerHTML=chart(rows,total);$("meter").dataset.k=k;$("src").textContent="Computed by: "+src;$("stats").innerHTML=[["Storage time",total+" h"],["In danger zone",f.danger_hours.toFixed(1)+" h"],["Peak temp",f.max_temp+" °C"]].map(a=>`<div><b>${a[1]}</b><span>${a[0]}</span></div>`).join("");
+ const m=Math.max(...contrib.map(c=>Math.abs(c.v)),1e-6);
+ $("why").innerHTML=`<p class="small" style="margin-top:0">How much each factor pushed the estimate toward higher (right) or lower (left) risk.</p>`+contrib.slice(0,5).map(c=>{const w=(Math.abs(c.v)/m*50).toFixed(0);return `<div class="bar"><span class="n" style="width:150px">${NAMES[c.k]}</span><span class="c"><i style="width:${c.v<0?50-w:50}%;background:transparent"></i><i style="width:${w}%;background:${c.v<0?"var(--low)":"var(--high)"}"></i></span></div>`}).join("");
+ $("rec").textContent=REC[label]+FOODREC[food];
+ const h=store(true);h.unshift({t:Date.now(),food,label,total,dz:f.danger_hours});store(false,h.slice(0,20));renderHist();
+ show("result");
+};
+let FOOD="chicken";
+document.querySelectorAll(".chip[data-v]").forEach(b=>b.onclick=()=>{FOOD=b.dataset.v;document.querySelectorAll(".chip[data-v]").forEach(c=>c.setAttribute("aria-pressed",c===b))});
+function show(v){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on",x.id==="v-"+v));document.querySelectorAll(".tabs button").forEach(t=>t.setAttribute("aria-selected",t.dataset.go===v));window.scrollTo({top:0,behavior:"smooth"});const i=["assess","result","hist","profile"].indexOf(v);if(i>=0)$("lens").style.transform=`translateX(${i*100}%)`}
+document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go));
+
+/* ---- onboarding, auth, profile ---- */
+let ST={};try{ST=JSON.parse(localStorage.getItem("lf_state")||"{}")}catch(e){}
+const saveST=()=>{try{localStorage.setItem("lf_state",JSON.stringify(ST))}catch(e){}};
+const COOKL={rare:"Rarely · 0–1 times a week",some:"Sometimes · 2–3 times a week",often:"Often · 4–6 times a week",daily:"Every day · 7+ times a week"};
+function screen(n){document.querySelectorAll(".screen").forEach(x=>x.hidden=x.id!=="s-"+n);window.scrollTo(0,0)}
+function route(){
+ if(!ST.intro)return screen("intro");
+ if(!ST.user)return screen("auth");
+ if(!ST.profile)return openSetup(false);
+ const p=ST.profile;$("hi").textContent="Hi, "+p.name+"!";$("av").textContent=p.name.trim()[0].toUpperCase();$("pn").textContent=p.name;
+ $("pe").textContent=ST.user.provider==="google"?"Signed in with Google (demo)":ST.user.email;
+ $("pa").innerHTML=(p.allergies.length?p.allergies:["No allergies listed"]).map(a=>`<span class="tc" style="cursor:default">${a}</span>`).join("");
+ $("pcook").textContent=COOKL[p.cook]||"";screen("app");show("assess")}
+/* intro */
+const tr=$("track"),dots=[...document.querySelectorAll(".dot")];let cur=0;
+tr.addEventListener("scroll",()=>{cur=Math.round(tr.scrollLeft/tr.clientWidth);dots.forEach((d,j)=>d.classList.toggle("on",j===cur));$("next").textContent=cur===2?"Get started":"Next"});
+const endIntro=()=>{ST.intro=1;saveST();route()};
+$("skip").onclick=endIntro;$("next").onclick=()=>cur<2?tr.scrollTo({left:(cur+1)*tr.clientWidth,behavior:"smooth"}):endIntro();
+/* auth (simulated) */
+let AM="up";
+document.querySelectorAll(".seg button").forEach(b=>b.onclick=()=>{AM=b.dataset.m;document.querySelectorAll(".seg button").forEach(x=>x.setAttribute("aria-pressed",x===b));$("at").textContent=AM==="up"?"Create your account":"Welcome back";$("as").textContent=AM==="up"?"Save your profile and assessments on this device.":"Log in to pick up where you left off.";$("pw").autocomplete=AM==="up"?"new-password":"current-password"});
+$("goem").onclick=()=>{const e=$("em").value.trim(),m=$("amsg");m.textContent="";
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){m.textContent="Enter a valid email address.";return}
+ if($("pw").value.length<6){m.textContent="Password needs at least 6 characters.";return}
+ ST.user={email:e,provider:"email"};$("pw").value="";saveST();route()};
+$("goog").onclick=()=>{ST.user={email:"",provider:"google"};saveST();route()};
+/* setup + profile */
+let EDIT=false,SA=[],SC="";
+function openSetup(edit){EDIT=edit;const p=ST.profile||{name:"",allergies:[],cook:""};$("nm").value=p.name;SA=[...p.allergies];SC=p.cook;
+ document.querySelectorAll("#alg .tc").forEach(b=>b.setAttribute("aria-pressed",SA.includes(b.dataset.a)||(b.dataset.a==="No allergies"&&edit&&!SA.length&&!!ST.profile)));
+ document.querySelectorAll("#cook .opt").forEach(b=>b.setAttribute("aria-pressed",b.dataset.c===SC));
+ $("cancel").hidden=!edit;$("fin").textContent=edit?"Save changes":"Finish";$("smsg").textContent="";screen("setup")}
+document.querySelectorAll("#alg .tc").forEach(b=>b.onclick=()=>{const a=b.dataset.a;
+ if(a==="No allergies"){SA=[]}else{SA=SA.includes(a)?SA.filter(x=>x!==a):[...SA,a]}
+ document.querySelectorAll("#alg .tc").forEach(c=>c.setAttribute("aria-pressed",SA.includes(c.dataset.a)||(c.dataset.a==="No allergies"&&a==="No allergies"&&!SA.length)))});
+document.querySelectorAll("#cook .opt").forEach(b=>b.onclick=()=>{SC=b.dataset.c;document.querySelectorAll("#cook .opt").forEach(c=>c.setAttribute("aria-pressed",c===b))});
+$("fin").onclick=()=>{const n=$("nm").value.trim(),m=$("smsg");m.textContent="";
+ if(!n){m.textContent="Please enter your name.";return}if(!SC){m.textContent="Please choose how often you cook.";return}
+ ST.profile={name:n,allergies:SA,cook:SC};saveST();api("/api/profile",{method:"PUT",body:JSON.stringify({name:n,allergies:SA,cooking:SC})});remoteProfile(ST.profile);route()};
+$("cancel").onclick=()=>route();
+$("edit").onclick=()=>openSetup(true);
+$("out").onclick=()=>{delete ST.user;saveST();screen("auth")};
+/* ---- optional backend: active only when the page is served by the LuFood API (window.LUFOOD_API is set) ---- */
+const UID=ST.uid||(ST.uid=(crypto.randomUUID?crypto.randomUUID():"u"+Date.now()+Math.random().toString(16).slice(2)));saveST();
+async function api(path,opt){if(typeof window.LUFOOD_API!=="string")return null;try{const r=await fetch(window.LUFOOD_API+path,{...opt,headers:{"Content-Type":"application/json","X-User-Id":UID,...(TOKEN?{Authorization:"Bearer "+TOKEN}:{})}});return r.ok?await r.json():null}catch(e){return null}}
+/* ---- Supabase Auth: active only when the backend injects window.LUFOOD_SUPABASE and loads supabase-js ---- */
+const SBC=window.LUFOOD_SUPABASE,SB=(SBC&&window.supabase)?window.supabase.createClient(SBC.url,SBC.key):null;
+let TOKEN=null;
+async function initAuth(){
+ if(SB){const{data}=await SB.auth.getSession(),s=data.session;TOKEN=s?s.access_token:null;
+  if(s){ST.user={email:s.user.email||"",provider:(s.user.app_metadata&&s.user.app_metadata.provider)||"email"}}else{delete ST.user}
+  saveST();SB.auth.onAuthStateChange((_e,x)=>{TOKEN=x?x.access_token:null});
+  const n=document.querySelector("#s-auth .note");if(n)n.textContent="Secured with Supabase Auth. LuFood never stores your password."}
+ if(SB&&ST.user)await remotePull();route()}
+const goemSim=$("goem").onclick,googSim=$("goog").onclick,outSim=$("out").onclick;
+$("goem").onclick=async()=>{if(!SB)return goemSim();const e=$("em").value.trim(),pw=$("pw").value,m=$("amsg");m.textContent="";
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){m.textContent="Enter a valid email address.";return}
+ if(pw.length<6){m.textContent="Password needs at least 6 characters.";return}
+ const r=AM==="up"?await SB.auth.signUp({email:e,password:pw}):await SB.auth.signInWithPassword({email:e,password:pw});
+ if(r.error){m.textContent=r.error.message;return}
+ if(!r.data.session){m.textContent="Check your email to confirm your account, then log in.";return}
+ $("pw").value="";await initAuth()};
+$("goog").onclick=()=>SB?SB.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.href.split("#")[0].split("?")[0]}}):googSim();
+$("out").onclick=async()=>{if(SB){await SB.auth.signOut();TOKEN=null;delete ST.profile;saveST();store(false,[])}outSim()};
+/* ---- Supabase data: each signed-in user's profile + history; Row Level Security limits everyone to their own rows ---- */
+async function sbUid(){if(!SB)return null;const{data}=await SB.auth.getSession();return data.session?data.session.user.id:null}
+async function remoteSave(food,total,rd,label,R){try{const uid=await sbUid();if(!uid)return;await SB.from("assessments").insert({id:crypto.randomUUID(),user_id:uid,food,total_hours:total,readings:JSON.stringify(rd.map(r=>({hour:r[0],temp_c:r[1]}))),label,result:JSON.stringify(R),created_at:new Date().toISOString()})}catch(e){}}
+async function remoteProfile(p){try{const uid=await sbUid();if(!uid)return;await SB.from("profiles").upsert({user_id:uid,name:p.name,allergies:JSON.stringify(p.allergies),cooking:p.cook,updated_at:new Date().toISOString()},{onConflict:"user_id"})}catch(e){}}
+async function remoteClear(){try{const uid=await sbUid();if(!uid)return;await SB.from("assessments").delete().eq("user_id",uid)}catch(e){}}
+async function remotePull(){try{const uid=await sbUid();if(!uid)return;
+ const pr=await SB.from("profiles").select("name,allergies,cooking").eq("user_id",uid).maybeSingle();
+ if(pr.data&&!ST.profile){ST.profile={name:pr.data.name,allergies:JSON.parse(pr.data.allergies),cook:pr.data.cooking};saveST()}
+ const hs=await SB.from("assessments").select("created_at,food,total_hours,label,readings").eq("user_id",uid).order("created_at",{ascending:false}).limit(20);
+ if(hs.data&&hs.data.length&&!store(true).length)store(false,hs.data.map(r=>({t:Date.parse(r.created_at),food:r.food,label:r.label,total:r.total_hours,dz:features(r.food,JSON.parse(r.readings).map(x=>[x.hour,x.temp_c]),r.total_hours).danger_hours})))}catch(e){}}
+renderRows();renderHist();initAuth();
+</script><script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></body></html>
