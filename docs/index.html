@@ -171,6 +171,42 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 :root:not([data-theme="light"]) .chip[aria-pressed=true]{background:rgba(236,72,153,.22)}
 :root:not([data-theme="light"]) .btn.ghost{background:rgba(236,72,153,.14);border-color:rgba(244,114,182,.45)}
 }
+
+/* ---- UX pass (ui-ux-pro-max checklist + design-motion-principles): forms, states, touch targets, motion ---- */
+.fmsg{min-height:22px;margin-top:8px;font-size:14px;color:var(--high)}.fmsg.ok{color:var(--low)}
+.ferr{margin:6px 2px 0;font-size:13px;line-height:1.35;font-weight:600;color:var(--high)}.ferr:empty{display:none}
+input[aria-invalid=true]{border-color:var(--high)}
+.pwwrap{position:relative}.pwwrap input{padding-right:76px}
+.eye{position:absolute;right:4px;top:3px;height:44px;min-width:64px;border:0;border-radius:12px;background:none;color:var(--pink-d);font-weight:700;font-size:14px}
+::placeholder{color:var(--muted);opacity:.85}
+.btn:disabled{opacity:.6;cursor:not-allowed}
+.spin{display:inline-block;width:16px;height:16px;margin-right:8px;vertical-align:-3px;border:2.5px solid currentColor;border-right-color:transparent;border-radius:50%}
+.tc[aria-pressed=true]{background:var(--pink);border-color:var(--pink);color:#1c0b14}
+.tc[aria-pressed=true]::before{content:"\2713\00a0";font-weight:800}
+.opt{position:relative}.opt[aria-pressed=true]{border-color:var(--pink);background:var(--pink-l)}
+.opt[aria-pressed=true]::after{content:"\2713";position:absolute;right:16px;top:50%;transform:translateY(-50%);color:var(--pink-d);font-weight:800;font-size:18px}
+.dots{gap:0}.dot{position:relative;width:20px;height:8px;border-radius:0;background:none}
+.dot::after{content:"";position:absolute;left:6px;top:0;width:8px;height:8px;border-radius:99px;background:var(--line);transition:transform .25s cubic-bezier(.23,1,.32,1),background-color .25s}
+.dot.on{width:20px;background:none}.dot.on::after{transform:scaleX(2.5);background:var(--pink)}
+.x2{width:44px;height:44px;top:-14px;right:-10px;padding:0;border:0;background:none;font-size:0;color:transparent;border-radius:50%}
+.x2::before{content:"\00d7";position:absolute;inset:10px;display:grid;place-items:center;border-radius:50%;background:var(--surface);border:1px solid var(--line);color:var(--muted);font-size:16px;line-height:1}
+@media(max-width:480px){.rrow{grid-template-columns:1fr auto;grid-template-areas:"aft tp" "rng rng";row-gap:8px;padding:12px 16px 14px;border-radius:28px}.rrow .aft{grid-area:aft}.rrow .tp{grid-area:tp}.rrow .rng{grid-area:rng}}
+.probs::before{content:"Model estimate";display:block;margin-bottom:4px;font-size:12px;font-weight:700;letter-spacing:.04em;color:rgba(255,255,255,.7)}
+.legend{display:flex;justify-content:space-between;margin:2px 0 0 160px;font-size:12px;color:var(--muted)}
+.empty{text-align:center;padding:12px 0 4px}.empty svg{display:block;width:56px;height:56px;margin:0 auto 8px;color:var(--pink)}.empty p{margin:0 0 4px}.empty .btn{margin-top:12px}
+.tabs button{font-size:12px}.chip small,.stats span{font-size:12px}
+.btn,.chip,.tc,.opt,.tabs button{touch-action:manipulation}
+@media (max-height:740px){.hero{min-height:0;padding:16px 18px 18px}.hero h1{font-size:23px;margin:8px 0 4px}}
+.lens{transition-duration:.32s;transition-timing-function:cubic-bezier(.34,1.3,.64,1)}
+@media(prefers-reduced-motion:no-preference){
+.view.on{animation:in .28s cubic-bezier(.23,1,.32,1)}
+.btn,.chip,.tc,.opt,.x2,.eye{transition:transform .12s cubic-bezier(.23,1,.32,1),background-color .15s,border-color .15s,opacity .15s}
+.btn:not(:disabled):active,.chip:active,.tc:active,.opt:active{transform:scale(.97)}
+#resbody.fresh>*{animation:rise .38s cubic-bezier(.23,1,.32,1) both}
+#resbody.fresh>:nth-child(2){animation-delay:60ms}#resbody.fresh>:nth-child(3){animation-delay:120ms}#resbody.fresh>:nth-child(4){animation-delay:180ms}#resbody.fresh>:nth-child(5){animation-delay:240ms}
+.spin{animation:spin .7s linear infinite}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}@keyframes spin{to{transform:rotate(360deg)}}
+}
 </style></head>
 <body>
 <div class="screen" id="s-intro" hidden><div class="intro"><button class="skip" id="skip" type="button">Skip</button>
@@ -180,21 +216,21 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 <div class="slide"><svg viewBox="0 0 320 260" role="img" aria-label="Shield with a check mark"><circle cx="160" cy="130" r="108" fill="#fce7f3"/><circle cx="160" cy="130" r="82" fill="none" stroke="#fbcfe8" stroke-width="10"/><path d="M160 46l68 24v58c0 46-32 76-68 90-36-14-68-44-68-90V70z" fill="#f472b6" stroke="#1c0b14" stroke-width="6" stroke-linejoin="round"/><path d="M160 46l68 24v58c0 46-32 76-68 90z" fill="#ec4899" opacity=".55"/><path d="M126 132l24 24 44-48" fill="none" stroke="#1c0b14" stroke-width="20" stroke-linecap="round" stroke-linejoin="round"/><path d="M126 132l24 24 44-48" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/><path d="M262 80l5 12 12 5-12 5-5 12-5-12-12-5 12-5zM52 176l4 9 9 4-9 4-4 9-4-9-9-4 9-4z" fill="#f472b6"/><ellipse cx="62" cy="86" rx="14" ry="7" transform="rotate(-35 62 86)" fill="#1c0b14"/><circle cx="268" cy="196" r="7" fill="#fff" stroke="#1c0b14" stroke-width="4"/></svg><h2>Clear advice, explained</h2><p>See why you got a result and what to do next. A decision-support tool, never a guarantee.</p></div>
 </div><div class="dots"><i class="dot on"></i><i class="dot"></i><i class="dot"></i></div><button class="btn" id="next" type="button">Next</button></div></div>
 
-<div class="screen" id="s-auth" hidden><div class="pad"><div class="top" style="margin:0"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#1c0b14" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V4a2 2 0 0 0-4 0v10.76a4 4 0 1 0 4 0z"/></svg></div><div class="wordmark">LuFood</div></div><h1 id="at">Create your account</h1><p class="sub" id="as">Save your profile and assessments on this device.</p>
+<div class="screen" id="s-auth" hidden><div class="pad"><div class="top" style="margin:0"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#e0457b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M10 8v3.5M8.5 8v3a1.5 1.5 0 0 0 3 0V8M10 11.5V16M14.5 8c-1.2 0-1.8 1.3-1.8 3 0 1.2.6 1.8 1.8 1.8V16"/></svg></div><div class="wordmark">LuFood</div></div><h1 id="at">Create your account</h1><p class="sub" id="as">Save your profile and assessments on this device.</p>
 <div class="seg"><button type="button" data-m="up" aria-pressed="true">Sign up</button><button type="button" data-m="in" aria-pressed="false">Log in</button></div>
-<label class="f" for="em">Email</label><input id="em" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com">
-<label class="f" for="pw">Password</label><input id="pw" type="password" autocomplete="new-password" placeholder="At least 6 characters">
-<div id="amsg" role="alert" style="min-height:22px;margin-top:8px;font-size:14px;color:var(--high)"></div>
+<label class="f" for="em">Email</label><input id="em" name="email" type="email" inputmode="email" autocomplete="email" placeholder="you@example.com" aria-describedby="e-em" aria-invalid="false"><p class="ferr" id="e-em" role="alert"></p>
+<label class="f" for="pw">Password</label><div class="pwwrap"><input id="pw" name="password" type="password" autocomplete="new-password" placeholder="At least 6 characters" aria-describedby="e-pw" aria-invalid="false"><button type="button" class="eye" id="eye" aria-label="Show password" aria-pressed="false">Show</button></div><p class="ferr" id="e-pw" role="alert"></p>
+<div id="amsg" role="alert" class="fmsg"></div>
 <button class="btn" id="goem" type="button">Continue with email</button>
 <div class="or">or</div>
 <button class="btn alt" id="goog" type="button"><span class="g">G</span>Continue with Google</button>
 <p class="note">Prototype only: sign-in is simulated on this device. Nothing is sent to a server and your password is not stored.</p></div></div>
 
-<div class="screen" id="s-setup" hidden><div class="pad"><div class="top" style="margin:0"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#1c0b14" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 14.76V4a2 2 0 0 0-4 0v10.76a4 4 0 1 0 4 0z"/></svg></div><div class="wordmark">LuFood</div></div><h1>Tell us about you</h1><p class="sub">A few quick details to personalise LuFood.</p>
-<label class="f" for="nm">Your name</label><input id="nm" type="text" autocomplete="given-name" placeholder="e.g. Zim" maxlength="40">
+<div class="screen" id="s-setup" hidden><div class="pad"><div class="top" style="margin:0"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#e0457b" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.6-7 9-4-1.4-7-4.5-7-9V6z"/><path d="M10 8v3.5M8.5 8v3a1.5 1.5 0 0 0 3 0V8M10 11.5V16M14.5 8c-1.2 0-1.8 1.3-1.8 3 0 1.2.6 1.8 1.8 1.8V16"/></svg></div><div class="wordmark">LuFood</div></div><h1>Tell us about you</h1><p class="sub">A few quick details to personalise LuFood.</p>
+<label class="f" for="nm">Your name</label><input id="nm" type="text" autocomplete="given-name" placeholder="e.g. Zim" maxlength="40" aria-describedby="e-nm" aria-invalid="false"><p class="ferr" id="e-nm" role="alert"></p>
 <label class="f">Allergy preferences</label><div class="wrapc" id="alg"><button type="button" class="tc" data-a="No allergies" aria-pressed="false">No allergies</button><button type="button" class="tc" data-a="Peanuts" aria-pressed="false">Peanuts</button><button type="button" class="tc" data-a="Tree nuts" aria-pressed="false">Tree nuts</button><button type="button" class="tc" data-a="Milk" aria-pressed="false">Milk</button><button type="button" class="tc" data-a="Eggs" aria-pressed="false">Eggs</button><button type="button" class="tc" data-a="Fish" aria-pressed="false">Fish</button><button type="button" class="tc" data-a="Shellfish" aria-pressed="false">Shellfish</button><button type="button" class="tc" data-a="Soy" aria-pressed="false">Soy</button><button type="button" class="tc" data-a="Wheat" aria-pressed="false">Wheat</button><button type="button" class="tc" data-a="Sesame" aria-pressed="false">Sesame</button></div>
 <label class="f">How often do you cook?</label><div id="cook"><button type="button" class="opt" data-c="rare" aria-pressed="false"><b>Rarely</b><small>0–1 times a week</small></button><button type="button" class="opt" data-c="some" aria-pressed="false"><b>Sometimes</b><small>2–3 times a week</small></button><button type="button" class="opt" data-c="often" aria-pressed="false"><b>Often</b><small>4–6 times a week</small></button><button type="button" class="opt" data-c="daily" aria-pressed="false"><b>Every day</b><small>7 or more times a week</small></button></div>
-<div id="smsg" role="alert" style="min-height:22px;margin-top:6px;font-size:14px;color:var(--high)"></div>
+<p class="ferr" id="e-ck" role="alert"></p><div id="smsg" role="alert" style="min-height:22px;margin-top:6px;font-size:14px;color:var(--high)"></div>
 <button class="btn" id="fin" type="button">Finish</button><button class="btn ghost" id="cancel" type="button" hidden>Cancel</button></div></div>
 
 <div class="screen" id="s-app" hidden><div class="app">
@@ -288,7 +324,7 @@ function chart(rd,total){
 }
 function renderHist(){
  const h=store(true);
- $("hist").innerHTML=h.length?h.map(e=>`<div class="hist"><span>${FOODNAME[e.food]} · ${e.total} h · ${e.dz.toFixed(1)} h in danger zone<br><span class="small">${new Date(e.t).toLocaleString()}</span></span><b class="${e.label}">${e.label[0].toUpperCase()+e.label.slice(1)}</b></div>`).join(""):'<p class="small">No assessments yet.</p>';
+ $("hist").innerHTML=h.length?h.map(e=>`<div class="hist"><span>${FOODNAME[e.food]} · ${e.total} h · ${e.dz.toFixed(1)} h in danger zone<br><span class="small">${new Date(e.t).toLocaleString(undefined,{dateStyle:"medium",timeStyle:"short"})}</span></span><b class="${e.label}">${e.label[0].toUpperCase()+e.label.slice(1)}</b></div>`).join(""):'<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg><p><b>No assessments yet</b></p><p class="small">Your saved results will appear here.</p><button class="btn ghost" type="button" data-go="assess">Start an assessment</button></div>';
 }
 $("clear").onclick=()=>{store(false,[]);renderHist();remoteClear()};
 $("go").onclick=async()=>{
@@ -296,19 +332,19 @@ $("go").onclick=async()=>{
  if(!(total>0)||rows.some(r=>!isFinite(r[0])||!isFinite(r[1])||r[0]<0)){msg.textContent="Please fill in every reading and a total time above 0.";return}
  if(Math.max(...rows.map(r=>r[0]))>total){msg.textContent="A reading is later than the assessment time.";return}
  const f=features(food,rows,total);let{p,contrib}=predict(f),src="In-browser model";let R=null;try{R=window.LuCore?window.LuCore.assess(food,total,rows.map(r=>[r[0],r[1]])):await api("/api/assess",{method:"POST",body:JSON.stringify({food,total_hours:total,readings:rows.map(r=>({hour:r[0],temp_c:r[1]}))})})}catch(e){R=null}if(R){p=LBL.map(n=>R.probabilities[n]);contrib=R.contributions.map(c=>({k:c.feature,v:c.value}));src=R.model.name+(window.LuCore?" on this device":" via LuFood API")}const km=p.indexOf(Math.max(...p)),rk=f.danger_hours<=2?0:f.danger_hours<=4?1:2,k=Math.max(km,rk),label=LBL[k];if(rk>km)src+=". Showing the more cautious of the model and the 2-hour/4-hour guideline.";if(window.LuCore&&R)remoteSave(food,total,rows,label,R);
- $("empty").hidden=true;$("resbody").hidden=false;
+ $("empty").hidden=true;$("resbody").hidden=false;{const rb=$("resbody");rb.classList.remove("fresh");void rb.offsetWidth;rb.classList.add("fresh")}
  $("label").innerHTML=`<span class="${label}">${label[0].toUpperCase()+label.slice(1)}</span>`;
  $("probs").innerHTML=LBL.map((n,i)=>`<div class="bar"><span class="n">${n[0].toUpperCase()+n.slice(1)}</span><span class="t"><i style="width:${(p[i]*100).toFixed(0)}%;background:${COL[i]}"></i></span><span class="v">${(p[i]*100).toFixed(0)}%</span></div>`).join("");
  $("chart").innerHTML=chart(rows,total);$("meter").dataset.k=k;$("src").textContent="Computed by: "+src;$("stats").innerHTML=[["Storage time",total+" h"],["In danger zone",f.danger_hours.toFixed(1)+" h"],["Peak temp",f.max_temp+" °C"]].map(a=>`<div><b>${a[1]}</b><span>${a[0]}</span></div>`).join("");
  const m=Math.max(...contrib.map(c=>Math.abs(c.v)),1e-6);
  $("why").innerHTML=`<p class="small" style="margin-top:0">How much each factor pushed the estimate toward higher (right) or lower (left) risk.</p>`+contrib.slice(0,5).map(c=>{const w=(Math.abs(c.v)/m*50).toFixed(0);return `<div class="bar"><span class="n" style="width:150px">${NAMES[c.k]}</span><span class="c"><i style="width:${c.v<0?50-w:50}%;background:transparent"></i><i style="width:${w}%;background:${c.v<0?"var(--low)":"var(--high)"}"></i></span></div>`}).join("");
- $("rec").textContent=REC[label]+FOODREC[food];
+ $("why").insertAdjacentHTML("beforeend",'<div class="legend"><span>lowers risk</span><span>raises risk</span></div>');$("rec").textContent=REC[label]+FOODREC[food];
  const h=store(true);h.unshift({t:Date.now(),food,label,total,dz:f.danger_hours});store(false,h.slice(0,20));renderHist();
  show("result");
 };
 let FOOD="chicken";
 document.querySelectorAll(".chip[data-v]").forEach(b=>b.onclick=()=>{FOOD=b.dataset.v;document.querySelectorAll(".chip[data-v]").forEach(c=>c.setAttribute("aria-pressed",c===b))});
-function show(v){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on",x.id==="v-"+v));document.querySelectorAll(".tabs button").forEach(t=>t.setAttribute("aria-selected",t.dataset.go===v));window.scrollTo({top:0,behavior:"smooth"});const i=["assess","result","hist","profile"].indexOf(v);if(i>=0)$("lens").style.transform=`translateX(${i*100}%)`}
+function show(v){document.querySelectorAll(".view").forEach(x=>x.classList.toggle("on",x.id==="v-"+v));document.querySelectorAll(".tabs button").forEach(t=>{const on=t.dataset.go===v;t.setAttribute("aria-selected",on);if(on)t.setAttribute("aria-current","page");else t.removeAttribute("aria-current")});window.scrollTo({top:0,behavior:"smooth"});const i=["assess","result","hist","profile"].indexOf(v);if(i>=0)$("lens").style.transform=`translateX(${i*100}%)`}
 document.querySelectorAll("[data-go]").forEach(b=>b.onclick=()=>show(b.dataset.go));
 
 /* ---- onboarding, auth, profile ---- */
@@ -342,7 +378,7 @@ let EDIT=false,SA=[],SC="";
 function openSetup(edit){EDIT=edit;const p=ST.profile||{name:"",allergies:[],cook:""};$("nm").value=p.name;SA=[...p.allergies];SC=p.cook;
  document.querySelectorAll("#alg .tc").forEach(b=>b.setAttribute("aria-pressed",SA.includes(b.dataset.a)||(b.dataset.a==="No allergies"&&edit&&!SA.length&&!!ST.profile)));
  document.querySelectorAll("#cook .opt").forEach(b=>b.setAttribute("aria-pressed",b.dataset.c===SC));
- $("cancel").hidden=!edit;$("fin").textContent=edit?"Save changes":"Finish";$("smsg").textContent="";screen("setup")}
+ $("cancel").hidden=!edit;$("fin").textContent=edit?"Save changes":"Finish";$("smsg").textContent="";$("e-nm").textContent="";$("e-ck").textContent="";screen("setup")}
 document.querySelectorAll("#alg .tc").forEach(b=>b.onclick=()=>{const a=b.dataset.a;
  if(a==="No allergies"){SA=[]}else{SA=SA.includes(a)?SA.filter(x=>x!==a):[...SA,a]}
  document.querySelectorAll("#alg .tc").forEach(c=>c.setAttribute("aria-pressed",SA.includes(c.dataset.a)||(c.dataset.a==="No allergies"&&a==="No allergies"&&!SA.length)))});
@@ -363,7 +399,7 @@ async function initAuth(){
  if(SB){const{data}=await SB.auth.getSession(),s=data.session;TOKEN=s?s.access_token:null;
   if(s){ST.user={email:s.user.email||"",provider:(s.user.app_metadata&&s.user.app_metadata.provider)||"email"}}else{delete ST.user}
   saveST();SB.auth.onAuthStateChange((_e,x)=>{TOKEN=x?x.access_token:null});
-  const n=document.querySelector("#s-auth .note");if(n)n.textContent="Secured with Supabase Auth. LuFood never stores your password."}
+  const n=document.querySelector("#s-auth .note");if(n)n.textContent="Secured with Supabase Auth. LuFood never stores your password.";checkProviders()}
  if(SB&&ST.user)await remotePull();route()}
 const goemSim=$("goem").onclick,googSim=$("goog").onclick,outSim=$("out").onclick;
 $("goem").onclick=async()=>{if(!SB)return goemSim();const e=$("em").value.trim(),pw=$("pw").value,m=$("amsg");m.textContent="";
@@ -385,5 +421,32 @@ async function remotePull(){try{const uid=await sbUid();if(!uid)return;
  if(pr.data&&!ST.profile){ST.profile={name:pr.data.name,allergies:JSON.parse(pr.data.allergies),cook:pr.data.cooking};saveST()}
  const hs=await SB.from("assessments").select("created_at,food,total_hours,label,readings").eq("user_id",uid).order("created_at",{ascending:false}).limit(20);
  if(hs.data&&hs.data.length&&!store(true).length)store(false,hs.data.map(r=>({t:Date.parse(r.created_at),food:r.food,label:r.label,total:r.total_hours,dz:features(r.food,JSON.parse(r.readings).map(x=>[x.hour,x.temp_c]),r.total_hours).danger_hours})))}catch(e){}}
+/* ---- UX pass: field-level errors, loading states, provider check, password toggle ---- */
+function ferr(id,msg){$("e-"+id).textContent=msg||"";$(id).setAttribute("aria-invalid",msg?"true":"false")}
+function busy(btn,on,txt){if(!btn.dataset.t)btn.dataset.t=btn.innerHTML;btn.disabled=on;btn.innerHTML=on?'<span class="spin" aria-hidden="true"></span>'+txt:btn.dataset.t}
+async function checkProviders(){try{const r=await fetch(SBC.url+"/auth/v1/settings",{headers:{apikey:SBC.key}});if(!r.ok)return;const j=await r.json();
+ if(j.external&&j.external.google===false){const g=$("goog");g.disabled=true;g.innerHTML='<span class="g">G</span>Google sign-in is not set up yet';g.title="Google sign-in has not been enabled for this app yet."}}catch(e){}}
+$("eye").onclick=()=>{const p=$("pw"),show=p.type==="password";p.type=show?"text":"password";$("eye").textContent=show?"Hide":"Show";$("eye").setAttribute("aria-pressed",show);$("eye").setAttribute("aria-label",show?"Hide password":"Show password")};
+$("goem").onclick=async()=>{const e=$("em").value.trim(),pw=$("pw").value,m=$("amsg");m.textContent="";m.className="fmsg";ferr("em","");ferr("pw","");
+ if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(e)){ferr("em","Enter a valid email address, like name@example.com.");$("em").focus();return}
+ if(pw.length<6){ferr("pw","Use at least 6 characters.");$("pw").focus();return}
+ if(!SB){ST.user={email:e,provider:"email"};$("pw").value="";saveST();route();return}
+ busy($("goem"),true,AM==="up"?"Creating account…":"Logging in…");
+ const r=AM==="up"?await SB.auth.signUp({email:e,password:pw}):await SB.auth.signInWithPassword({email:e,password:pw});
+ busy($("goem"),false);
+ if(r.error){m.textContent=r.error.message;return}
+ if(!r.data.session){m.textContent="Check your email to confirm your account, then log in.";m.className="fmsg ok";return}
+ $("pw").value="";await initAuth()};
+$("goog").onclick=async()=>{if(!SB)return googSim();$("amsg").textContent="";busy($("goog"),true,"Opening Google…");
+ const r=await SB.auth.signInWithOAuth({provider:"google",options:{redirectTo:location.href.split("#")[0].split("?")[0]}});
+ if(r.error){busy($("goog"),false);$("amsg").textContent=r.error.message}};
+$("fin").onclick=()=>{const n=$("nm").value.trim();$("e-nm").textContent="";$("e-ck").textContent="";$("nm").setAttribute("aria-invalid","false");
+ if(!n){$("e-nm").textContent="Please enter your name.";$("nm").setAttribute("aria-invalid","true");$("nm").focus();return}
+ if(!SC){$("e-ck").textContent="Please choose how often you cook.";$("cook").querySelector(".opt").focus();return}
+ ST.profile={name:n,allergies:SA,cook:SC};saveST();api("/api/profile",{method:"PUT",body:JSON.stringify({name:n,allergies:SA,cooking:SC})});remoteProfile(ST.profile);route()};
+$("hist").addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)show(b.dataset.go)});
+["em","pw","nm"].forEach(id=>$(id).addEventListener("input",()=>{const e=$("e-"+id);if(e&&e.textContent){e.textContent="";$(id).setAttribute("aria-invalid","false")}}));
+document.querySelectorAll("#cook .opt").forEach(b=>b.addEventListener("click",()=>{$("e-ck").textContent=""}));
+const _renderHist=renderHist;renderHist=function(){_renderHist();$("clear").hidden=!store(true).length};
 renderRows();renderHist();initAuth();
 </script><script>if("serviceWorker" in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}))</script></body></html>
